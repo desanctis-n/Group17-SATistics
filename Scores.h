@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -19,13 +20,13 @@ class Scores {
 
         // backed up by hashtables because we need lookups to be fast. Sorting algorithms will require lookups.
         unordered_map<string, float> subjectToAvgGPAs;
-        unordered_map<string, int> incomeToScores;
-        unordered_map<string, int> gradeToScores;
-        unordered_map<string, int> genderToScores;
-        unordered_map<string, int> scoreRanges;
+        unordered_map<string, int> criteriaToScores;
 
         Report();
     };
+    void assignDataMember(ifstream &file, const int &i, const int &switcher);
+    void assignDataMap(ifstream &file, const int &i, const int &switcher, const array<string*, 99> &names);
+    static void assignNames(ifstream  &file, array<string*, 99> &names);
     void generateFromFile();
 public:
     Scores();

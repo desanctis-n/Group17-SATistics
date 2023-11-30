@@ -13,7 +13,6 @@ class Scores {
         int year = 0;
         string stateCode;
         string stateName;
-
         int totalMath = 0;
         int totalTestTakers = 0;
         int totalVerbal = 0;
@@ -24,14 +23,20 @@ class Scores {
 
         Report();
     };
+    unordered_map<int, Report*> dataSet;
+
     void assignDataMember(ifstream &file, const int &i, const int &switcher);
-    void assignDataMap(ifstream &file, const int &i, const int &switcher, const array<string*, 99> &names);
+    void assignDataMap(ifstream &file, const int &i, const bool &switcher, const array<string*, 99> &names);
     static void assignNames(ifstream  &file, array<string*, 99> &names);
     void generateFromFile();
 public:
     Scores();
-    vector<Report*> dataSet;
+    vector<Report*> displayVector;
+
+    void modifyDisplayVector(const Report& report);
     // return type is double since function will return time for operation using chrono
     double quickSort(const string &sortCriteria);
     double heapSort(const string &sortCriteria);
+
+
 };

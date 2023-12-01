@@ -7,6 +7,10 @@ Scores::Scores() {
     generateFromFile();
 }
 
+bool Scores::Report::operator==(const Scores::Report &rhs) const {
+    return key == rhs.key;
+}
+
 // ----------------------------- FILE IO ---------------------------- //
 
 
@@ -26,6 +30,7 @@ void Scores::generateFromFile() {
         for(int i = 0; i < NUMROWS - 1; i++) {
             pair<int, string> key = getKey(file);
             dataSet.emplace(key, new Report);
+            dataSet[key]->key = key;
             for (int j = 0; j < NUMCLASSMEMBERS; j++)
                 assignDataMember(file, key, j);
             assignDataMap(file, key, labels);
@@ -97,14 +102,18 @@ void Scores::assignNames(std::ifstream &file, array<string*, 99> &labels) const 
 void Scores::push_report(const int &year, const string& stateCode) {
     Report* temp = dataSet[make_pair(year, stateCode)];
     bool inVector = false;
-    for (auto report : displayVector)
+    for (const auto &report : displayVector)
         if (report == temp)
-            inVector == true;
+            inVector = true;
     if (!inVector)
         displayVector.push_back(temp);
 }
 void Scores::pop_report(const int &year, const std::string &stateCode) {
-
+    Report* temp = dataSet[make_pair(year, stateCode)];
+    auto iter = displayVector.begin();
+    for (; iter != displayVector.end(); ++iter)
+        if (*iter == temp)
+            displayVector.erase(iter);
 }
 void Scores::heapSort(const std::string &sortCriteria) {
 

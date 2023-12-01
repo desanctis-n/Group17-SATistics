@@ -18,6 +18,7 @@ class Scores {
         // backed up by hashtables because we need lookups to be fast. Sorting algorithms will require lookups.
         unordered_map<string, float> criteriaToValue;
         Report();
+        //void operator==(const Report
     };
     map<pair<int, string>, Report*> dataSet;
 
@@ -34,7 +35,8 @@ public:
     Scores();
     vector<Report*> displayVector;
 
-    void modifyDisplayVector(const int &year, const string& stateCode);
+    void push_report(const int &year, const string &stateCode);
+    void pop_report(const int &year, const string &stateCode);
     void heapSort(const string &sortCriteria);
     // return type should not be void since function will return time for operation using chrono
     double quickSort(const string &sortCriteria);

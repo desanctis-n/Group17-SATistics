@@ -11,6 +11,7 @@ using namespace std;
 
 class Scores {
     struct Report {
+        pair<int, string> key;
         string stateName;
         int totalMath = 0;
         int totalTestTakers = 0;
@@ -18,7 +19,7 @@ class Scores {
         // backed up by hashtables because we need lookups to be fast. Sorting algorithms will require lookups.
         unordered_map<string, float> criteriaToValue;
         Report();
-        //void operator==(const Report
+        bool operator==(const Report &rhs) const;
     };
     map<pair<int, string>, Report*> dataSet;
 

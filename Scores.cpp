@@ -94,7 +94,16 @@ void Scores::assignNames(std::ifstream &file, array<string*, 99> &labels) const 
 // ----------------------------- VECTOR MODIFICATION ---------------------------- //
 
 
-void Scores::modifyDisplayVector(const int &year, const string& stateCode) {
+void Scores::push_report(const int &year, const string& stateCode) {
+    Report* temp = dataSet[make_pair(year, stateCode)];
+    bool inVector = false;
+    for (auto report : displayVector)
+        if (report == temp)
+            inVector == true;
+    if (!inVector)
+        displayVector.push_back(temp);
+}
+void Scores::pop_report(const int &year, const std::string &stateCode) {
 
 }
 void Scores::heapSort(const std::string &sortCriteria) {

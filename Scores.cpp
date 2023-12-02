@@ -108,13 +108,98 @@ void Scores::push_report(const int &year, const string& stateCode) {
     if (!inVector)
         displayVector.push_back(temp);
 }
-void Scores::pop_report(const int &year, const std::string &stateCode) {
+void Scores::pop_report(const int &year, const string &stateCode) {
     Report* temp = dataSet[make_pair(year, stateCode)];
     auto iter = displayVector.begin();
     for (; iter != displayVector.end(); ++iter)
         if (*iter == temp)
             displayVector.erase(iter);
 }
-void Scores::heapSort(const std::string &sortCriteria) {
+void Scores::push_all() {
+    displayVector.clear();
+    for (const auto &report : dataSet)
+        displayVector.push_back(report.second);
+}
+void Scores::clear_all() {
+    displayVector.clear();
+}
+
+// ----------------------------- SEARCHING AND SORTING ---------------------------- //
+
+
+set<string> Scores::searchStates(const string &searchTerm) {
+    set<string> results;
+    for (const auto &rep : dataSet) {
+        bool validSearch = true;
+        for (int i = 0; i < searchTerm.size(); i++) {
+            if (searchTerm[i] != rep.second->stateName[i] || searchTerm.size() > rep.second->stateName.size())
+                validSearch = false;
+        }
+        if (validSearch)
+            results.emplace(rep.second->stateName);
+    }
+    if (results.empty())
+        cout << "No states match the criteria. Maybe you forgot to capitalize?" << endl;
+    return results;
+}
+void Scores::heapSort(const string &sortCriteria) {
 
 }
+
+// ----------------------------- STATE NAME -> STATE CODE ---------------------------- //
+
+const unordered_map<string, string> Scores::getInitials {{
+  {"Alaska", "AK"},
+  {"Alabama", "AL"},
+  {"Arkansas", "AR"},
+  {"Arizona", "AZ"},
+  {"California", "CA"},
+  {"Colorado", "CO"},
+  {"Connecticut", "CT"},
+  {"District Of Columbia", "DC"},
+  {"Delaware", "DE"},
+  {"Florida", "FL"},
+  {"Georgia", "GA"},
+  {"Hawaii", "HI"},
+  {"Iowa", "IA"},
+  {"Idaho", "ID"},
+  {"Illinois", "IL"},
+  {"Indiana", "IN"},
+  {"Kansas", "KS"},
+  {"Kentucky", "KY"},
+  {"Louisiana", "LA"},
+  {"Massachusetts", "MA"},
+  {"Maryland", "MD"},
+  {"Maine", "ME"},
+  {"Michigan", "MI"},
+  {"Minnesota", "MN"},
+  {"Missouri", "MO"},
+  {"Mississippi", "MS"},
+  {"Montana", "MT"},
+  {"North Carolina", "NC"},
+  {"North Dakota", "ND"},
+  {"Nebraska", "NE"},
+  {"New Hampshire", "NH"},
+  {"New Jersey", "NJ"},
+  {"New Mexico", "NM"},
+  {"Nevada", "NV"},
+  {"New York", "NY"},
+  {"Ohio", "OH"},
+  {"Oklahoma", "OK"},
+  {"Oregon", "OR"},
+  {"Pennsylvania", "PA"},
+  {"Puerto Rico", "PR"},
+  {"Rhode Island", "RI"},
+  {"South Carolina", "SC"},
+  {"South Dakota", "SD"},
+  {"Tennessee", "TN"},
+  {"Texas", "TX"},
+  {"Utah", "UT"},
+  {"Virginia", "VA"},
+  {"Virgin Islands", "VI"},
+  {"Vermont", "VT"},
+  {"Washington", "WA"},
+  {"Wisconsin", "WI"},
+  {"West Virginia", "WV"},
+  {"Wyoming", "WY"}}
+};

@@ -23,7 +23,7 @@ class Scores {
         bool operator==(const Report &rhs) const;
     };
     map<pair<int, string>, Report*> dataSet;
-    static const unordered_map<string, string> getInitials;
+    vector<const Report*> displayVector;
 
     // ------------------------------ FILE IO --------------------------------- //
 
@@ -36,15 +36,25 @@ class Scores {
     // ----------------------- PUBLIC FUNCTIONS AND MEMBERS ------------------------ //
 public:
     Scores();
-    vector<Report*> displayVector;
+    static const unordered_map<string, string> getInitials;
+
+    // ----------------------- VECTOR MODIFICATION ------------------------ //
 
     void push_report(const int &year, const string &stateCode);
     void pop_report(const int &year, const string &stateCode);
     void push_all();
     void clear_all();
 
-    set<string> searchStates(const string &searchTerm);
+    // ----------------------- PRIVATE MEMBER ACCESS ------------------------ //
 
+    int getSize();
+    const Report& getReport(const int &index);
+    void print();
+    void print(const int &index);
+
+    // ----------------------- SEARCHING AND SORTING ------------------------ //
+
+    set<string> searchStates(const string &searchTerm);
     void heapSort(const string &sortCriteria);
     // return type should not be void since function will return time for operation using chrono
     double quickSort(const string &sortCriteria);

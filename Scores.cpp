@@ -1,4 +1,5 @@
 #include "Scores.h"
+#include "quickSort.h"
 
 using namespace std;
 
@@ -164,6 +165,35 @@ set<string> Scores::searchStates(const string &searchTerm) {
 }
 void Scores::heapSort(const string &sortCriteria) {
 
+}
+double Scores::quickSort(const string &sortCriteria) {
+    // Makes vector of pairs
+    // First: original index of Report inside the data set
+    // Second: value from criteria that is being sorted
+    vector<pair<int, float>> dataVector;
+    for (int i = 0; i < getSize(); i++) {
+        Report r = getReport(i);
+        float value = r.criteriaToValue[sortCriteria];
+        dataVector.push_back({i, value});
+    }
+
+    // Start timer
+    auto start = chrono::high_resolution_clock::now();
+
+    // Calls the actual quick sort function
+    quickSorts<pair<int, float>>(dataVector, 0, dataVector.size() - 1, [sortCriteria](const pair<int, float>& a, const pair<int, float>& b) -> bool {
+        return a.second < b.second;
+    });
+
+    // Stop timer
+    auto stop = chrono::high_resolution_clock::now();
+
+    // Counts with start and stop
+    // Nanoseconds for more precision
+    auto duration = chrono::duration_cast<chrono::nanoseconds>(stop - start);
+
+    // Nanoseconds converted into milliseconds
+    return static_cast<double>(duration.count()) * 0.000001;
 }
 
 

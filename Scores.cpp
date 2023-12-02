@@ -11,6 +11,7 @@ bool Scores::Report::operator==(const Scores::Report &rhs) const {
     return key == rhs.key;
 }
 
+
 // ----------------------------- FILE IO ---------------------------- //
 
 
@@ -124,6 +125,25 @@ void Scores::clear_all() {
     displayVector.clear();
 }
 
+
+// ----------------------------- PRIVATE MEMBER ACCESS ----------------------------- //
+
+
+int Scores::getSize() {
+    return displayVector.size();
+}
+const Scores::Report& Scores::getReport(const int &index) {
+    return *displayVector[index];
+}
+void Scores::print() {
+    for (const auto& i : displayVector)
+        cout << i->key.first << ", " << i->stateName << endl;
+}
+void Scores::print(const int &index) {
+    cout << displayVector[index]->key.first << ", " << displayVector[index]->stateName << endl;
+}
+
+
 // ----------------------------- SEARCHING AND SORTING ---------------------------- //
 
 
@@ -146,7 +166,9 @@ void Scores::heapSort(const string &sortCriteria) {
 
 }
 
+
 // ----------------------------- STATE NAME -> STATE CODE ---------------------------- //
+
 
 const unordered_map<string, string> Scores::getInitials {{
   {"Alaska", "AK"},

@@ -26,10 +26,10 @@ class Scores {
     // ------------------------------ FILE IO --------------------------------- //
 
     void generateFromFile();
-    void assignNames(ifstream &file, array<string*, 99> &labels) const;
+    void assignLabels(ifstream &file, vector<string*> &labels) const;
     pair<int, string> getKey(ifstream &file);
     void assignDataMember(ifstream &file, const pair<int, string> &key, const int &switcher);
-    void assignDataMap(ifstream &file, const pair<int, string> &key, const array<string*, 99> &labels);
+    void assignDataMap(ifstream &file, const pair<int, string> &key, const vector<string*> &labels);
 
     // ----------------------- PUBLIC FUNCTIONS AND MEMBERS ------------------------ //
 public:

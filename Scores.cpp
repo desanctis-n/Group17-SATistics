@@ -25,8 +25,8 @@ void Scores::generateFromFile() {
         const int NUMCLASSMEMBERS = 4;
         string garbage;
         string temp;
-        array<string*, NUMCOLS> labels;
-        assignNames(file, labels);
+        vector<string*> labels(NUMCOLS);
+        assignLabels(file, labels);
         for(int i = 0; i < NUMROWS - 1; i++) {
             pair<int, string> key = getKey(file);
             dataSet.emplace(key, new Report);
@@ -73,7 +73,7 @@ void Scores::assignDataMember(ifstream &file, const pair<int, string> &key, cons
             break;
     }
 }
-void Scores::assignDataMap(std::ifstream &file, const pair<int, string> &key, const array<std::string*, 99> &names) {
+void Scores::assignDataMap(std::ifstream &file, const pair<int, string> &key, const vector<std::string*> &labels) {
     string garbage;
     string temp;
     const int NUMCOLS = 99;
@@ -82,10 +82,10 @@ void Scores::assignDataMap(std::ifstream &file, const pair<int, string> &key, co
     for (int j = NUMCLASSMEMBERS + 2; j < NUMCOLS; j++) {
         getline(file, garbage, '\"');
         getline(file, temp, '\"');
-        dataSet[key]->criteriaToValue.emplace(*names[j], stof(temp));
+        dataSet[key]->criteriaToValue.emplace(*labels[j], stof(temp));
     }
 }
-void Scores::assignNames(std::ifstream &file, array<string*, 99> &labels) const {
+void Scores::assignLabels(std::ifstream &file, vector<string*> &labels) const {
     string garbage;
     string temp;
     for (int i = 0; i < 99; i++) {

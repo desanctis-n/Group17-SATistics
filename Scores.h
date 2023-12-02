@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <unordered_map>
+#include <set>
 #include <vector>
 #include <chrono>
 
@@ -22,6 +23,7 @@ class Scores {
         bool operator==(const Report &rhs) const;
     };
     map<pair<int, string>, Report*> dataSet;
+    static const unordered_map<string, string> getInitials;
 
     // ------------------------------ FILE IO --------------------------------- //
 
@@ -38,9 +40,12 @@ public:
 
     void push_report(const int &year, const string &stateCode);
     void pop_report(const int &year, const string &stateCode);
+    void push_all();
+    void clear_all();
+
+    set<string> searchStates(const string &searchTerm);
+
     void heapSort(const string &sortCriteria);
     // return type should not be void since function will return time for operation using chrono
     double quickSort(const string &sortCriteria);
-
-
 };

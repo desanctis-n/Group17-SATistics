@@ -167,22 +167,14 @@ void Scores::heapSort(const string &sortCriteria) {
 
 }
 double Scores::quickSort(const string &sortCriteria) {
-    // Makes vector of pairs
-    // First: original index of Report inside the data set
-    // Second: value from criteria that is being sorted
-    vector<pair<int, float>> dataVector;
-    for (int i = 0; i < getSize(); i++) {
-        Report r = getReport(i);
-        float value = r.criteriaToValue[sortCriteria];
-        dataVector.push_back({i, value});
-    }
-
     // Start timer
     auto start = chrono::high_resolution_clock::now();
 
     // Calls the actual quick sort function
-    quickSorts<pair<int, float>>(dataVector, 0, dataVector.size() - 1, [sortCriteria](const pair<int, float>& a, const pair<int, float>& b) -> bool {
-        return a.second < b.second;
+    quickSorts<const Report*>(displayVector, 0, displayVector.size() - 1, [sortCriteria](const Report* a, const Report* b) -> bool {
+        Report x = *a;
+        Report y = *b;
+        return x.criteriaToValue[sortCriteria] < y.criteriaToValue[sortCriteria];
     });
 
     // Stop timer

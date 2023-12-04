@@ -1,0 +1,3 @@
+/Users/MarvinsLaptop/CLionProjects/Group17-SATistics/cmake-build-debug/CMakeFiles/Group17_SATistics.dir
+/Users/MarvinsLaptop/CLionProjects/Group17-SATistics/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/MarvinsLaptop/CLionProjects/Group17-SATistics/cmake-build-debug/CMakeFiles/rebuild_cache.dir

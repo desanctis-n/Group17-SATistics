@@ -1,0 +1,7 @@
+# ninja log v5
+1	731	1701726136734853347	CMakeFiles/Group17_SATistics.dir/Scores.cpp.o	c321a2da3dc6fcef
+2	301	1701729963708505785	CMakeFiles/Group17_SATistics.dir/Heap.cpp.o	83545eb9ed2d1f2b
+0	573	1701725947737908610	CMakeFiles/Group17_SATistics.dir/statics.cpp.o	2819affc247ae094
+500	527	1701730182588606383	Group17_SATistics	a717c0532a9e0fe0
+2	500	1701730182560242408	CMakeFiles/Group17_SATistics.dir/main.cpp.o	ce8bc88831c28917
+0	40	1701730736411238533	build.ninja	288e19a26e47fb36

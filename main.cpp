@@ -12,9 +12,7 @@ int main() {
 //    cout << "Created by Nicholas DeSanctis, Marvin Howell Aguirre, and Matthew Nobleza" << endl;
 
     //data.push_report(2005, Scores::getInitials["Alabama"]);
-    data.push_report(2006, Scores::getInitials.at("Florida"));
-    data.push_report(2006, Scores::getInitials.at("Alaska"));
-    data.push_report(2008, Scores::getInitials.at("Florida"));
+    data.push_all();
     //data.push_report(2007, Scores::getInitials.at("Florida"));
 
 
@@ -24,7 +22,6 @@ int main() {
     //cout << data.getReport(0).criteriaToValue["Academic Subjects.English.Average GPA"] <<endl;
     cout << Scores::labels[8] << endl;
 
-    data.print(Scores::labels[8]);
     data.heapSort("Academic Subjects.English.Average GPA");
     cout << endl;
     data.print(Scores::labels[8]);

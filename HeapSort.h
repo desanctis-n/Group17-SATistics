@@ -1,7 +1,7 @@
 #ifndef HEAPSORT_H
 #define HEAPSORT_H
 
-// DEPRECATED FILE
+// DEPRECATED FILE (DO NOT USE)
 
 class Heap{
 private:

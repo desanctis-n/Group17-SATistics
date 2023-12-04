@@ -179,3 +179,11 @@ double Scores::quickSort(const string &sortCriteria) {
     // Nanoseconds converted into milliseconds
     return static_cast<double>(duration.count()) * 0.000001;
 }
+void Scores::heapSort(string sortCriteria) {
+    Heap h;
+    for(int i = 0; i < displayVector.size(); i++){
+        h.insertHeap(displayVector[i], sortCriteria);
+    }
+
+    displayVector = h.sortHeap(sortCriteria);
+}

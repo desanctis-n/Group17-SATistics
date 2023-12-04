@@ -1,5 +1,4 @@
 #include "Scores.h"
-#include "quickSort.h"
 
 using namespace std;
 
@@ -17,8 +16,8 @@ bool Scores::Report::operator==(const Scores::Report &rhs) const {
 
 
 void Scores::generateFromFile() {
-    chrono::high_resolution_clock time;
-    auto start = time.now();
+//    chrono::high_resolution_clock time;
+//    auto start = time.now();
     ifstream file;
     file.open("school_scores.csv");
     if (file.is_open()) {
@@ -27,22 +26,25 @@ void Scores::generateFromFile() {
         const int NUMCLASSMEMBERS = 4;
         string garbage;
         string temp;
-        vector<string*> labels(NUMCOLS);
-        assignLabels(file, labels);
+        //vector<string*> labels(NUMCOLS);
+        //assignLabels(file, labels);
+//        for (auto l : labels)
+//            cout << "{\"" << *l << "\"}," << endl;
+        getline(file, garbage);
         for(int i = 0; i < NUMROWS - 1; i++) {
             pair<int, string> key = getKey(file);
             dataSet.emplace(key, new Report);
             dataSet[key]->key = key;
             for (int j = 0; j < NUMCLASSMEMBERS; j++)
                 assignDataMember(file, key, j);
-            assignDataMap(file, key, labels);
+            assignDataMap(file, key);
             getline(file, garbage, '\n');
         }
     }
     else
         throw runtime_error("Could not open file.");
-    auto end = time.now();
-    cout << chrono::duration_cast<chrono::milliseconds>(end-start).count() << endl;
+//    auto end = time.now();
+//    cout << chrono::duration_cast<chrono::milliseconds>(end-start).count() << endl;
 }
 pair<int, string> Scores::getKey(ifstream &file) {
     string garbage;
@@ -75,7 +77,7 @@ void Scores::assignDataMember(ifstream &file, const pair<int, string> &key, cons
             break;
     }
 }
-void Scores::assignDataMap(std::ifstream &file, const pair<int, string> &key, const vector<std::string*> &labels) {
+void Scores::assignDataMap(std::ifstream &file, const pair<int, string> &key) {
     string garbage;
     string temp;
     const int NUMCOLS = 99;
@@ -84,51 +86,43 @@ void Scores::assignDataMap(std::ifstream &file, const pair<int, string> &key, co
     for (int j = NUMCLASSMEMBERS + 2; j < NUMCOLS; j++) {
         getline(file, garbage, '\"');
         getline(file, temp, '\"');
-        dataSet[key]->criteriaToValue.emplace(*labels[j], stof(temp));
+        dataSet[key]->criteriaToValue.emplace(labels[j], stof(temp));
     }
 }
-void Scores::assignLabels(std::ifstream &file, vector<string*> &labels) const {
-    string garbage;
-    string temp;
-    for (int i = 0; i < 99; i++) {
-        getline(file, garbage, '\"');
-        getline(file, temp, '\"');
-        labels[i] = new string(temp);
-    }
-}
-
 
 // ----------------------------- VECTOR MODIFICATION ---------------------------- //
 
 
 void Scores::push_report(const int &year, const string& stateCode) {
-    Report* temp = dataSet[make_pair(year, stateCode)];
-    bool inVector = false;
-    for (const auto &report : displayVector)
-        if (report == temp)
-            inVector = true;
-    if (!inVector)
-        displayVector.push_back(temp);
+    if (dataSet.at(make_pair(year, stateCode)) != nullptr) {
+        Report* temp = dataSet.at(make_pair(year, stateCode));
+        bool inVector = false;
+        for (const auto &report: displayVector)
+            if (report == temp)
+                inVector = true;
+        if (!inVector)
+            displayVector.push_back(temp);
+    }
 }
 void Scores::pop_report(const int &year, const string &stateCode) {
-    Report* temp = dataSet[make_pair(year, stateCode)];
-    auto iter = displayVector.begin();
-    for (; iter != displayVector.end(); ++iter)
-        if (*iter == temp)
-            displayVector.erase(iter);
+    if (dataSet.at(make_pair(year, stateCode)) != nullptr) {
+        Report *temp = dataSet[make_pair(year, stateCode)];
+        auto iter = displayVector.begin();
+        for (; iter != displayVector.end(); ++iter)
+            if (*iter == temp)
+                displayVector.erase(iter);
+    }
 }
 void Scores::push_all() {
     displayVector.clear();
     for (const auto &report : dataSet)
         displayVector.push_back(report.second);
 }
-void Scores::clear_all() {
+void Scores::pop_all() {
     displayVector.clear();
 }
 
-
 // ----------------------------- PRIVATE MEMBER ACCESS ----------------------------- //
-
 
 int Scores::getSize() {
     return displayVector.size();
@@ -136,14 +130,17 @@ int Scores::getSize() {
 const Scores::Report& Scores::getReport(const int &index) {
     return *displayVector[index];
 }
-void Scores::print() {
-    for (const auto& i : displayVector)
-        cout << i->key.first << ", " << i->stateName << endl;
+void Scores::print(string& sortCriteria) {
+    for (int i = 0; i < displayVector.size(); i++) {
+        cout << i << ": " << displayVector[i]->key.first;
+        cout << ", " << displayVector[i]->stateName;
+        cout << ": " << displayVector[i]->criteriaToValue.at(sortCriteria);
+        cout << endl;
+    }
 }
-void Scores::print(const int &index) {
+void Scores::print(const int &index, string &sortCriteria) {
     cout << displayVector[index]->key.first << ", " << displayVector[index]->stateName << endl;
 }
-
 
 // ----------------------------- SEARCHING AND SORTING ---------------------------- //
 
@@ -159,19 +156,14 @@ set<string> Scores::searchStates(const string &searchTerm) {
         if (validSearch)
             results.emplace(rep.second->stateName);
     }
-    if (results.empty())
-        cout << "No states match the criteria. Maybe you forgot to capitalize?" << endl;
     return results;
-}
-void Scores::heapSort(const string &sortCriteria) {
-
 }
 double Scores::quickSort(const string &sortCriteria) {
     // Start timer
     auto start = chrono::high_resolution_clock::now();
 
     // Calls the actual quick sort function
-    quickSorts<const Report*>(displayVector, 0, displayVector.size() - 1, [sortCriteria](const Report* a, const Report* b) -> bool {
+    quickSorts<Report*>(displayVector, 0, displayVector.size() - 1, [sortCriteria](const Report* a, const Report* b) -> bool {
         Report x = *a;
         Report y = *b;
         return x.criteriaToValue[sortCriteria] < y.criteriaToValue[sortCriteria];
@@ -187,63 +179,3 @@ double Scores::quickSort(const string &sortCriteria) {
     // Nanoseconds converted into milliseconds
     return static_cast<double>(duration.count()) * 0.000001;
 }
-
-
-// ----------------------------- STATE NAME -> STATE CODE ---------------------------- //
-
-
-const unordered_map<string, string> Scores::getInitials {{
-  {"Alaska", "AK"},
-  {"Alabama", "AL"},
-  {"Arkansas", "AR"},
-  {"Arizona", "AZ"},
-  {"California", "CA"},
-  {"Colorado", "CO"},
-  {"Connecticut", "CT"},
-  {"District Of Columbia", "DC"},
-  {"Delaware", "DE"},
-  {"Florida", "FL"},
-  {"Georgia", "GA"},
-  {"Hawaii", "HI"},
-  {"Iowa", "IA"},
-  {"Idaho", "ID"},
-  {"Illinois", "IL"},
-  {"Indiana", "IN"},
-  {"Kansas", "KS"},
-  {"Kentucky", "KY"},
-  {"Louisiana", "LA"},
-  {"Massachusetts", "MA"},
-  {"Maryland", "MD"},
-  {"Maine", "ME"},
-  {"Michigan", "MI"},
-  {"Minnesota", "MN"},
-  {"Missouri", "MO"},
-  {"Mississippi", "MS"},
-  {"Montana", "MT"},
-  {"North Carolina", "NC"},
-  {"North Dakota", "ND"},
-  {"Nebraska", "NE"},
-  {"New Hampshire", "NH"},
-  {"New Jersey", "NJ"},
-  {"New Mexico", "NM"},
-  {"Nevada", "NV"},
-  {"New York", "NY"},
-  {"Ohio", "OH"},
-  {"Oklahoma", "OK"},
-  {"Oregon", "OR"},
-  {"Pennsylvania", "PA"},
-  {"Puerto Rico", "PR"},
-  {"Rhode Island", "RI"},
-  {"South Carolina", "SC"},
-  {"South Dakota", "SD"},
-  {"Tennessee", "TN"},
-  {"Texas", "TX"},
-  {"Utah", "UT"},
-  {"Virginia", "VA"},
-  {"Virgin Islands", "VI"},
-  {"Vermont", "VT"},
-  {"Washington", "WA"},
-  {"Wisconsin", "WI"},
-  {"West Virginia", "WV"},
-  {"Wyoming", "WY"}}
-};

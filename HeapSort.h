@@ -1,6 +1,8 @@
 #ifndef HEAPSORT_H
 #define HEAPSORT_H
 
+// DEPRECATED FILE (DO NOT USE)
+
 class Heap{
 private:
     int arr[578];

@@ -7,6 +7,7 @@
 #include <set>
 #include <vector>
 #include <chrono>
+#include "quickSort.h"
 
 using namespace std;
 
@@ -22,40 +23,58 @@ class Scores {
         Report();
         bool operator==(const Report &rhs) const;
     };
+    class Heap {
+    private:
+        int size = 0;
+    public:
+        vector<Report *> arr;
+        Heap();
+        vector<Report *> extractMax(Report *&val, string &sortCriteria);
+        vector<Report *> insertHeap(Report *val, string &sortCriteria);
+        vector<Report *> sortHeap(string &sortCriteria);
+    };
     map<pair<int, string>, Report*> dataSet;
-    vector<const Report*> displayVector;
+    vector<Report*> displayVector;
+
+    // --- MENU --- //
+    static void printMenu();
+    void switchOpt(int &userOpt);
+    void option1_2(bool opt1);
+    void option3_4(bool opt3);
+    void option5_6(bool opt5);
 
     // ------------------------------ FILE IO --------------------------------- //
 
     void generateFromFile();
-    void assignLabels(ifstream &file, vector<string*> &labels) const;
     pair<int, string> getKey(ifstream &file);
     void assignDataMember(ifstream &file, const pair<int, string> &key, const int &switcher);
-    void assignDataMap(ifstream &file, const pair<int, string> &key, const vector<string*> &labels);
+    void assignDataMap(ifstream &file, const pair<int, string> &key);
 
     // ----------------------- PUBLIC FUNCTIONS AND MEMBERS ------------------------ //
 public:
     Scores();
-    static const unordered_map<string, string> getInitials;
+    static unordered_map<string, string> getInitials;
+    static vector<string> labels;
+    void SATistics();
 
     // ----------------------- VECTOR MODIFICATION ------------------------ //
 
     void push_report(const int &year, const string &stateCode);
     void pop_report(const int &year, const string &stateCode);
     void push_all();
-    void clear_all();
+    void pop_all();
 
     // ----------------------- PRIVATE MEMBER ACCESS ------------------------ //
 
     int getSize();
     const Report& getReport(const int &index);
-    void print();
-    void print(const int &index);
+    void print(string& sortCriteria);
+    void print(const int &index, string& sortCriteria);
 
     // ----------------------- SEARCHING AND SORTING ------------------------ //
 
     set<string> searchStates(const string &searchTerm);
-    void heapSort(const string &sortCriteria);
+    void heapSort(string sortCriteria);
     // return type should not be void since function will return time for operation using chrono
     double quickSort(const string &sortCriteria);
 };
